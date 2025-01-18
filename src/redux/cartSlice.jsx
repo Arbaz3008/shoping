@@ -37,11 +37,33 @@ state.totalQuantity++;
              if(findItem){
                 state.totalPrice -= findItem.totalPrice
                 state.totalQuantity -= findItem.quantity
-                state.products=  state.products.filter(item=>item.id !== id)
+                state.products =  state.products.filter(item=> item.id !== id)
              }
+        },
+        increaseQuantity(state, action){
+            const id = action.payload;
+             const findItem = state.products.find((item)=>item.id === id)
+             if(findItem){
+                findItem.quantity++;
+                findItem.totalPrice += findItem.price
+                state.totalQuantity++;
+                state.totalPrice += findItem.price
+             }
+        },
+        decreaseQuantity(state, action){
+            const id = action.payload;
+             const findItem = state.products.find((item)=>item.id === id)
+             if(findItem.quantity > 1) {
+             if(findItem){
+                findItem.quantity--;
+                findItem.totalPrice -= findItem.price
+                state.totalQuantity--;
+                state.totalPrice -= findItem.price
+             }
+            }
         }
     },
 })
 
-export const {addToCart , removefromCart} = cartSlice.actions
+export const {addToCart , removefromCart , increaseQuantity,decreaseQuantity} = cartSlice.actions
 export default  cartSlice.reducer

@@ -4,13 +4,16 @@ import empty from '../assets/Images/empty.png'
 import { FaTrashAlt } from 'react-icons/fa'
 import Changeadress from '../components/Changeadress'
 import Modal from '../components/modal'
-import {removefromCart} from'../redux/cartSlice'
+import {removefromCart ,increaseQuantity,decreaseQuantity} from'../redux/cartSlice'
+import {  useNavigate } from 'react-router-dom'
+
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
     const [address , setAddress] = useState('main street, 1122')
     const [ismodalopen , setisModalopen] = useState(false)
     const dispatch  =  useDispatch()
+    const navigate = useNavigate()
     return (
         <div>
             {cart.products.length > 0 ? (
@@ -45,9 +48,13 @@ const Cart = () => {
                                         <div className='flex space-x-10 items-center'>
                                             <p>${product.price}</p>
                                             <div className='flex items-center justify-center border'>
-                                                <button className='text-xl font-bold px-1.5 border-r'>-</button>
+                                                <button className='text-xl font-bold px-1.5 border-r' 
+                                                onClick={()=>dispatch(decreaseQuantity(product.id))}
+                                                >-</button>
                                                 <p className='text-xl px-2'>{product.quantity}</p>
-                                                <button className='text-xl px-1 border-l'>+</button>
+                                                <button className='text-xl px-1 border-l'
+                                                onClick={()=>dispatch(increaseQuantity(product.id))}
+                                                >+</button>
                                             </div>
                                             <div className=' flex space-x-12  items-center'>
                                                 <p>${(product.quantity * product.price).toFixed(2)}</p>
@@ -81,7 +88,9 @@ const Cart = () => {
                                 <span className='flex justify-between mb-4'>Total Price:</span>
                                 <span>{cart.totalPrice.toFixed(2)}</span>
                             </div> 
-                            <button className='w-full bg-red-600 text-white py-2 hover:bg-red-800'>Proceed To checkout</button>
+                            <button className='w-full bg-red-600 text-white py-2 hover:bg-red-800'
+                            onClick={()=> navigate('/Checkout')}
+                            >Proceed To checkout</button>
                         </div>
                     </div>
                     <Modal
